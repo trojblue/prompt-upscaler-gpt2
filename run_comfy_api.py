@@ -78,6 +78,7 @@ def modify_workflow_keys(
     neg:str="lowres, worst quality, displeasing, bad quality, bad anatomy, text, error, extra digit, cropped, average quality",
     model:str="bxl-v4c-stepfix/checkpoint-e4_s19000.safetensors",
     seed:int=-1,
+    batch_size:int=4
 ):
     if seed == -1:
         seed = random.randint(0, 9000000)
@@ -94,6 +95,8 @@ def modify_workflow_keys(
     if '34:3' in workflow and workflow['34:3']['class_type'] == 'KSampler':
         workflow['34:3']['inputs']['seed'] = seed
 
+    if '34:0' in workflow and workflow['34:0']['class_type'] == 'EmptyLatentImage':
+        workflow['34:0']['inputs']['batch_size'] = batch_size
 
     return workflow
 
@@ -137,7 +140,11 @@ def concatenate_images_horizontally(images, max_height=1024):
 
     return concatenated_image
 
-def run_workflow(pos:str, neg:str="", model:str="", seed:int=-1):
+
+DEFAULT_NEG = "lowres, worst quality, displeasing, bad quality, bad anatomy, text, error, extra digit, cropped, average quality"
+DEFAULT_MODEL = "bxl-v4c-stepfix/checkpoint-e5_s19000.safetensors"
+
+def run_workflow(pos:str, neg:str="", model:str="", seed:int=-1, batch_size:int=4):
 
     if not neg:
         neg = DEFAULT_NEG
@@ -146,7 +153,7 @@ def run_workflow(pos:str, neg:str="", model:str="", seed:int=-1):
 
     executor = WorkflowExecutor()
     workflow = ub.loads("lworkflow_api.json", debug_print=False)
-    workflow = modify_workflow_keys(workflow, pos=pos, neg=neg, model=model, seed=seed)
+    workflow = modify_workflow_keys(workflow, pos=pos, neg=neg, model=model, seed=seed, batch_size=batch_size)
 
     # run the workflow
     workflow_result = executor.run_workflow(workflow)
@@ -154,7 +161,3 @@ def run_workflow(pos:str, neg:str="", model:str="", seed:int=-1):
 
     # return images
     return images_list
-
-
-DEFAULT_NEG = "lowres, worst quality, displeasing, bad quality, bad anatomy, text, error, extra digit, cropped, average quality"
-DEFAULT_MODEL = "bxl-v4c-stepfix/checkpoint-e5_s19000.safetensors"

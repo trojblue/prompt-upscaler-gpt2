@@ -3,6 +3,7 @@ trained_model/
 saved_images/
 flagged/
 logs/
+generated_images/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
