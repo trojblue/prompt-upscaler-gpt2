@@ -1,0 +1,134 @@
+{
+  "6": {
+    "inputs": {
+      "text": "yoisaki kanade, 1girl, 1boy, censored, underwear, blue eyes, sex from behind, cum in pussy, doggystyle, panties around one leg, male pubic hair, small breasts, pillow, solo focus, open mouth, grey shirt, black panties, looking back, mosaic censoring, trembling, all fours, torso grab, looking at viewer, panties removed, overflow, bed sheet, hair between eyes, mosaic censoring, bottomless, nose blush, dark-skinned male, blue panties, ass grab, cumdrip, r-18, project sekai, panties through one leg, back boobs, bangtail, grey shorts, hair ornament, interracial, very long hair",
+      "clip": [
+        "101",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "POSITIVE"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "lowres, worst quality, displeasing, bad quality, bad anatomy, text, error, extra digit, cropped, average quality",
+      "clip": [
+        "101",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "NEGATIVE"
+    }
+  },
+  "101": {
+    "inputs": {
+      "ckpt_name": "bxl-v4c-stepfix/bxl-v4c-stepfix/checkpoint-e4_s15000.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "103": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "34:4",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "34:0": {
+    "inputs": {
+      "width": 768,
+      "height": 1280,
+      "batch_size": 4
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "34:1": {
+    "inputs": {
+      "multiplier": 0.75,
+      "model": [
+        "101",
+        0
+      ]
+    },
+    "class_type": "RescaleCFG",
+    "_meta": {
+      "title": "RescaleCFG"
+    }
+  },
+  "34:2": {
+    "inputs": {
+      "sampling": "v_prediction",
+      "zsnr": true,
+      "model": [
+        "34:1",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingDiscrete",
+    "_meta": {
+      "title": "ModelSamplingDiscrete"
+    }
+  },
+  "34:3": {
+    "inputs": {
+      "seed": 432737405573798,
+      "steps": 28,
+      "cfg": 5.5,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "34:2",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "34:0",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "34:4": {
+    "inputs": {
+      "samples": [
+        "34:3",
+        0
+      ],
+      "vae": [
+        "101",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  }
+}
