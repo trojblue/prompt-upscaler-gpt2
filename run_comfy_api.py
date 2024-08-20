@@ -17,6 +17,7 @@ import random
 from PIL import Image
 
 class WorkflowExecutor:
+    # ssh -L 8188:localhost;8188 root@184.105.6.63 -p 54809
     def __init__(self, server_address="127.0.0.1:8188"):
         self.server_address = server_address
         self.client_id = str(uuid.uuid4())
@@ -142,7 +143,7 @@ def concatenate_images_horizontally(images, max_height=1024):
 
 
 DEFAULT_NEG = "lowres, worst quality, displeasing, bad quality, bad anatomy, text, error, extra digit, cropped, average quality"
-DEFAULT_MODEL = "bxl-v4c-stepfix/checkpoint-e5_s19000.safetensors"
+DEFAULT_MODEL = "bxl-v4c-stepfix/checkpoint-e12_s42000.safetensors"
 
 def run_workflow(pos:str, neg:str="", model:str="", seed:int=-1, batch_size:int=4):
 
